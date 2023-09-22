@@ -36,11 +36,11 @@ if __name__ == "__main__":
     
     client = ImgurClient(client_id, client_secret, access_token, refresh_token)
 
-    # ========== upload image =============
+    # ========== upload image ==========
     # image = upload(client, local_img_file, album)
     # print(f"圖片網址: {image['link']}")
 
-    # delete image
+    # ========== delete image ==========
     # is_deleted = delete(client)
     # if is_deleted:
     #     print("Delete Success")
