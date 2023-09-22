@@ -16,7 +16,7 @@ Done
 
 ### 3. 刪除
 
-- 根據 image ID 刪除
+- 需修改程式碼的 image ID ，才能把剛上傳的檔案刪除
 ```
 Delete image... 
 Done
