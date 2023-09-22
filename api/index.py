@@ -1,51 +1,46 @@
+from imgurpython import ImgurClient
 import os
-import psycopg2
-from flask import Flask, jsonify
-from datetime import time
+from datetime import datetime
 
 
-app = Flask(__name__)
+def upload(client_data, local_img_file, album , name = 'test-name!' ,title = 'test-title' ):
+    config = {
+        'album':  album,
+        'name': name,
+        'title': title,
+        'description': f'test-{datetime.now()}'
+    }
 
-keys = ['CampaignId', 'Title', 'Content', 'maxMembers', 'minMembers', 'Owner', 'CreateAt', 'StartAt', 'EndAt', 'Available', 'status']
+    print("Uploading image... ")
+    image = client_data.upload_from_path(local_img_file, config=config, anon=False)
+    print("Done")
 
-def preprocess_data(data_tuple):
-    processed_data = []
-    for item in data_tuple:
-        if isinstance(item, time):
-            processed_data.append(item.strftime('%H:%M:%S'))
-        else:
-            processed_data.append(item)
-    return tuple(processed_data)
-
-
-def get_db_connection():
-    conn = psycopg2.connect(host=os.getenv('DB_HOST'),
-                            port=os.getenv('DB_PORT'),
-                            database=os.getenv('DB_DATABASE'),
-                            user=os.getenv('DB_USERNAME'),
-                            password=os.getenv('DB_PASSWORD')
-    )
-    return conn
-
-@app.route("/")
-def hello_world():
-    return "<p>Welcome To The Fionn Page</p>"
+    return image
 
 
-@app.route('/campaign')
-def test():
-    conn = get_db_connection()
+def delete(client_data, image = "9PHXMJh"):
 
-    cur = conn.cursor()
+    print("Delete image... ")
+    is_deleted = client_data.delete_image(image)
+    print("Done")
 
-    cur.execute('SELECT * FROM campaign')
+    return is_deleted
+
+if __name__ == "__main__":
+    client_id = os.getenv('CLIENT_ID')
+    client_secret = os.getenv('CLIENT_SECRET')
+    access_token = os.getenv('ACCESS_TOKEN')
+    refresh_token = os.getenv('REFRESH_TOKEN')
+    album = os.getenv('ALBUM')
+    local_img_file = os.getenv('LOCAL_IMG_FILE')
     
-    data = cur.fetchall()
-    
-    cur.close()
-    conn.close()
-    print(data[0])
-    processed_data = preprocess_data(data[0])
-    data_dict = dict(zip(keys, processed_data))
-    
-    return jsonify(data_dict)
+    client = ImgurClient(client_id, client_secret, access_token, refresh_token)
+
+    # ========== upload image =============
+    # image = upload(client, local_img_file, album)
+    # print(f"圖片網址: {image['link']}")
+
+    # delete image
+    # is_deleted = delete(client)
+    # if is_deleted:
+    #     print("Delete Success")
