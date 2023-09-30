@@ -2,15 +2,15 @@
   "rewrites": [
   {
     "source": "/api/(.*)",
-    "destination": "api/index.py"
+    "destination": "api/index"
   },
   {
     "source": "/api/(.*)",
-    "destination": "api/database.py"
+    "destination": "api/database"
   },
   {
     "source": "/api/(.*)",
-    "destination": "api/models.py"
+    "destination": "api/models"
   }
   ]
 }
