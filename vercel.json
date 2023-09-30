@@ -1,8 +1,16 @@
 {
   "rewrites": [
-    {
-    "src": "/api/(.*)",
-    "dest": "api/index.py"
+  {
+    "source": "/api/(.*)",
+    "destination": "api/index.py"
+  },
+  {
+    "source": "/api/(.*)",
+    "destination": "api/database.py"
+  },
+  {
+    "source": "/api/(.*)",
+    "destination": "api/models.py"
   }
   ]
 }
