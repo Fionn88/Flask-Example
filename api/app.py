@@ -4,6 +4,7 @@ from database import SessionLocal, engine
 from models import Base
 import os
 from datetime import time
+from flask_migrate import Migrate
 import psycopg2
 
 
@@ -14,6 +15,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']=os.getenv('DATABASE_URL')
 
 db=SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Student(db.Model):
   __tablename__='students'
@@ -21,11 +23,18 @@ class Student(db.Model):
   fname=db.Column(db.String(40))
   lname=db.Column(db.String(40))
   pet=db.Column(db.String(40))
+  personals = db.relationship("Personal", backref="personal")
 
   def __init__(self,fname,lname,pet):
     self.fname=fname
     self.lname=lname
     self.pet=pet
+
+class Personal(db.Model):
+    __tablename__ = 'personal'
+    id = db.Column(db.Integer, primary_key=True)   
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+
 
 def get_db():
     db = SessionLocal()
